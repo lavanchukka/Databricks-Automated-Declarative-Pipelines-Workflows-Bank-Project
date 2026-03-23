@@ -3,6 +3,9 @@
 
 ## Project Details
 
+<img width="1906" height="928" alt="Screenshot 2026-03-23 154639" src="https://github.com/user-attachments/assets/e33c5338-95f8-4b49-9abf-3afb5607694b" />
+
+
 Landing_Layer.py: Defines both landing_customers_incremental and landing_accounts_incremental as streaming tables using Autoloader, with correct schemas. These are the inputs for your bronze layer.
 
 bronze_layer.py: Reads from landing sources, cleans/transforms, then writes bronze_customers_clean and bronze_accounts_clean. Expectation columns now match transformations.
