@@ -1,16 +1,18 @@
-import dlt
+                          ##### Gold Layer - Joins & Aggregations #######
+# Import Required Libraries
+from pyspark import pipelines as dp
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
 ############################ JOINED ############################
 
-@dlt.table(
+@dp.table(
     name="gold_cust_acc_trns_mv",
     comment="Customer Account Transactions Materialized View"
 )
 def gold_cust_acc_trns_mv():
-    customers = dlt.read("silver_customers_transformed")
-    tx = dlt.read("silver_accounts_transactions_transformed")
+    customers = dp.read("silver_customers_transformed")
+    tx = dp.read("silver_accounts_transactions_transformed")
 
     joined = customers.join(
         tx,
@@ -23,12 +25,12 @@ def gold_cust_acc_trns_mv():
 
 ############################ AGGREGATIONS ############################
 
-@dlt.table(
+@dp.table(
     name="gold_cust_acc_trans_agg",
     comment="Gold layer aggregated MV of customer + account transactions"
 )
 def gold_cust_acc_trans_agg():
-    df = dlt.read("gold_cust_acc_trns_mv")  # source wide table with customer + txn rows
+    df = dp.read("gold_cust_acc_trns_mv")  # source wide table with customer + txn rows
 
     return (
         df.groupBy(

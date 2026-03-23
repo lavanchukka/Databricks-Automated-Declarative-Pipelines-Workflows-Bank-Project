@@ -1,10 +1,12 @@
-import dlt
+                           ##### Silver Layer - Data Transformations #######
+# Import Required Libraries
+from pyspark import pipelines as dp
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
-################ DATA TRANSFORMATION - CUSTOMERS TABLE ################
+        ################ DATA TRANSFORMATION - CUSTOMERS TABLE ################
 
-@dlt.table(
+@dp.table(
     name="silver_customers_transformed",
     comment="Transformed customers table")
 
@@ -29,11 +31,11 @@ def silver_customers_transformed():
     return df
 
 
-#---------------- SCD1 - APPLY_CHANGES 
+#---------- SCD1 - APPLY_CHANGES ---------#
 
-dlt.create_streaming_table("silver_customers_transformed_scd1")
+dp.create_streaming_table("silver_customers_transformed_scd1")
 
-dlt.apply_changes(
+dp.create_auto_cdc_flow(
     target="silver_customers_transformed_scd1",
     source="silver_customers_transformed",
     keys=["customer_id"],
@@ -42,9 +44,9 @@ dlt.apply_changes(
     except_column_list=["transformation_date"]
 )
 
-#--- view
+#--- view-------#
 
-@dlt.view(
+@dp.view(
     name="silver_customers_transformed_view",
     comment="View of silver_customers_transformed table"
 )
@@ -52,8 +54,9 @@ def silver_customers_transformed_view():
    return spark.readStream.table("silver_customers_transformed")
 
 
-################## DATA TRANSFORMATION - TRANSACTIONS TABLE 
-@dlt.table(
+           ################# DATA TRANSFORMATION - TRANSACTIONS TABLE #####################
+
+@dp.table(
     name="silver_accounts_transactions_transformed",
     comment="Transformed accounts_transactions table")
 def silver_accounts_transactions_transformed():
@@ -77,11 +80,11 @@ def silver_accounts_transactions_transformed():
     return df
 
 
-#---------------- SCD2 - AUTO CDC---------------------#
+#-------- SCD2 - AUTO CDC---------#
 
-dlt.create_streaming_table("silver_accounts_transactions_transformed_scd2")
+dp.create_streaming_table("silver_accounts_transactions_transformed_scd2")
 
-dlt.create_auto_cdc_flow(
+dp.create_auto_cdc_flow(
     target="silver_accounts_transactions_transformed_scd2",
     source="silver_accounts_transactions_transformed",
     keys=["txn_id"],
@@ -91,12 +94,11 @@ dlt.create_auto_cdc_flow(
 )
 
 
-#--- Materialized view
+#--- Materialized view--------#
 
-@dlt.table(
+@dp.table(
     name="silver_accounts_transactions_transformed_view",
     comment="View of silver_accounts_transformed table"
 )
 def silver_accounts_transactions_transformed_view():
     return spark.read.table("silver_accounts_transactions_transformed")
-

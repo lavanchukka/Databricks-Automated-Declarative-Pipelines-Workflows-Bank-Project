@@ -1,4 +1,4 @@
-##### Bronze Layer - Data Cleaning - Customers #####
+                       ##### Bronze Layer - Data Cleaning - Customers #####
 
 # Import Required Libraries
 import dlt
@@ -8,25 +8,23 @@ from pyspark.sql.types import *
 # Create a streaming table
 @dlt.table(
     name="bronze_customers_clean",
-    comment="cleaned data from the customers ingested layer data"
-)
-# @dlt.expect_or_fail("valid_customer_id", "customer_id IS NOT NULL")
-# @dlt.expect_or_drop("valid_customer_name", "name IS NOT NULL")
-# @dlt.expect_or_drop("valid_dob", "dob IS NOT NULL")
-# @dlt.expect_or_drop("valid_city", "city IS NOT NULL")
-# @dlt.expect_or_drop("valid_join_date", "join_date IS NOT NULL")
-# @dlt.expect_or_drop(
-#     "valid_email",
-#     "email IS NOT NULL AND email RLIKE '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'"
-# )
-# @dlt.expect_or_drop("valid_phone", "phone_number IS NOT NULL")
-# @dlt.expect_or_drop("valid_channel", "preferred_channel IS NOT NULL")
-# @dlt.expect_or_drop("valid_occupation", "occupation IS NOT NULL")
-# @dlt.expect_or_drop("valid_income", "income_range IS NOT NULL")
-# @dlt.expect_or_drop("valid_risk_segment", "risk_segment IS NOT NULL")
-# @dlt.expect_or_drop("valid_address", "address IS NOT NULL")
-# @dlt.expect("valid_gender", "gender IS NOT NULL")
-# @dlt.expect("valid_status", "status IS NOT NULL")
+    comment="cleaned data from the customers ingested layer data")
+
+@dlt.expect_or_fail("valid_customer_id", "customer_id IS NOT NULL")
+@dlt.expect_or_drop("valid_customer_name", "name IS NOT NULL")
+@dlt.expect_or_drop("valid_dob", "dob IS NOT NULL")
+@dlt.expect_or_drop("valid_city", "city IS NOT NULL")
+@dlt.expect_or_drop("valid_join_date", "join_date IS NOT NULL")
+@dlt.expect_or_drop("valid_email", "email IS NOT NULL AND email RLIKE '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'")
+@dlt.expect_or_drop("valid_phone", "phone IS NOT NULL")
+@dlt.expect_or_drop("valid_channel", "channel IS NOT NULL")
+@dlt.expect_or_drop("valid_occupation", "occupation IS NOT NULL")
+@dlt.expect_or_drop("valid_income", "income_range IS NOT NULL")
+@dlt.expect_or_drop("valid_risk_segment", "risk_segment IS NOT NULL")
+@dlt.expect_or_drop("valid_address", "address IS NOT NULL")
+@dlt.expect("valid_gender", "gender IS NOT NULL")
+@dlt.expect("valid_status", "status IS NOT NULL")
+
 def bronze_customers_clean():
     df = spark.readStream.table("landing_customers_incremental")
 
